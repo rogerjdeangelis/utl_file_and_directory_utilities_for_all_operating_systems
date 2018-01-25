@@ -104,7 +104,7 @@ Keywords: sas sql join merge big data analytics macros oracle teradata mysql sas
            \---child_2
 
 
-      2. ALL PLATFORMS - NUMBER OF FILE, FILE NUMBER AND FILENAME
+      2. ALL PLATFORMS - NUMBER OF FILES, FILE NUMBER AND FILENAME
          ========================================================
 
           %macro utl_dir(pth,out);
