@@ -33,7 +33,7 @@ Keywords: sas sql join merge big data analytics macros oracle teradata mysql sas
       12.  Unix: Return the path up one level
       13.  All Platforms does a file exist
       14.  Given a full path extract the folder and filename with and without extension
-      15. Delete empth directory
+      15. Delete empty directory
     *                _          _                   _
      _ __ ___   __ _| | _____  (_)_ __  _ __  _   _| |_
     | '_ ` _ \ / _` | |/ / _ \ | | '_ \| '_ \| | | | __|
