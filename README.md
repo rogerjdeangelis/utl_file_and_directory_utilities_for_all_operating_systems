@@ -33,7 +33,7 @@ Keywords: sas sql join merge big data analytics macros oracle teradata mysql sas
       12.  Unix: Return the path up one level
       13.  All Platforms does a file exist
       14.  Given a full path extract the folder and filename with and without extension
-
+      15. Delete empth directory
     *                _          _                   _
      _ __ ___   __ _| | _____  (_)_ __  _ __  _   _| |_
     | '_ ` _ \ / _` | |/ / _ \ | | '_ \| '_ \| | | | __|
@@ -1178,6 +1178,25 @@ Keywords: sas sql join merge big data analytics macros oracle teradata mysql sas
             put (_all_) (= $ /);
 
           run;quit;
+
+
+15. Delete empth directory
+===========================
+
+  %macro utl_delmty(folder)/des="Delete empty folders";
+      filename dir "&folder";
+      data _null_;
+         dir_id = dopen('dir');
+         total_members = dnum(dir_id);
+         if total_members <= 0 then do;
+            rc = fdelete('dir');
+            rc = fclose(dir_id);
+         end;
+       run;quit;
+   %mend utl_delmty;
+
+   %utl_delmty(c:/parent/child_3);
+
 
 
 
