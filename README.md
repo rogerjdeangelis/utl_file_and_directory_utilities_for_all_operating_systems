@@ -1180,10 +1180,10 @@ Keywords: sas sql join merge big data analytics macros oracle teradata mysql sas
           run;quit;
 
 
-15. Delete empth directory
-===========================
+    15. Delete empth directory
+    ===========================
 
-  %macro utl_delmty(folder)/des="Delete empty folders";
+    %macro utl_delmty(folder)/des="Delete empty folders";
       filename dir "&folder";
       data _null_;
          dir_id = dopen('dir');
@@ -1193,7 +1193,7 @@ Keywords: sas sql join merge big data analytics macros oracle teradata mysql sas
             rc = fclose(dir_id);
          end;
        run;quit;
-   %mend utl_delmty;
+     %mend utl_delmty;
 
    %utl_delmty(c:/parent/child_3);
 
