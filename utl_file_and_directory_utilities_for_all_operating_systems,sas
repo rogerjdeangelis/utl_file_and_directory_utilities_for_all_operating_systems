@@ -30,6 +30,9 @@ http://support.sas.com/kb/24/820.html
   13.  All Platforms does a file exist
   14.  Given a full path extract the folder and filename with and without extension
   15. Delete empty directory
+  16. Detailed-List-of-Directories-and-Files-in-Linux  
+      https://tinyurl.com/y59u45t7                     
+
 *                _          _                   _
  _ __ ___   __ _| | _____  (_)_ __  _ __  _   _| |_
 | '_ ` _ \ / _` | |/ / _ \ | | '_ \| '_ \| | | | __|
@@ -1203,3 +1206,67 @@ API
 Training
 Shop
 Blog
+
+16. Detailed-List-of-Directories-and-Files-in-Linux  
+===================================================
+SAS Doc                                                                                                                     
+https://tinyurl.com/y59u45t7                                                                                                
+https://communities.sas.com/t5/SAS-Communities-Library/Detailed-List-of-Directories-and-Files-in-Linux/ta-p/582142          
+                                                                                                                            
+TomRVincent                                                                                                                 
+https://communities.sas.com/t5/user/viewprofilepage/user-id/144199                                                          
+                                                                                                                            
+                                                                                                                            
+%let directory=&_r/uml/;                                                                                                    
+                                                                                                                            
+filename tmp pipe "ls -mlR --full-time -1 &directory";                                                                      
+                                                                                                                            
+data want12;                                                                                                                
+      infile tmp dlm="¬";                                                                                                   
+      length dir_line $2000;                                                                                                
+      input dir_line;                                                                                                       
+run;                                                                                                                        
+                                                                                                                            
+proc sql noprint;                                                                                                           
+      select max(countw(dir_line, ' ')) into :maxwords trimmed from want12;                                                 
+quit;                                                                                                                       
+                                                                                                                            
+data want;                                                                                                                  
+      set want12;                                                                                                           
+      format dir $200.;                                                                                                     
+      retain dir;                                                                                                           
+      words = countw(dir_line, ' ');                                                                                        
+                                                                                                                            
+      if find(dir_line,"/") then                                                                                            
+            dir=dir_line;                                                                                                   
+      array parsed_vars(*) $200 new_var1-new_var&maxwords;                                                                  
+      i=1;                                                                                                                  
+                                                                                                                            
+      do while(i<words or scan(dir_line, i, " ") ne "" or i=1);                                                             
+            if find(dir_line,"/")=0 and scan(dir_line, i, " ") ne ""  and i<>1 then                                         
+                  parsed_vars(i) =scan(dir_line, i, " ");                                                                   
+            else if i=1 then parsed_vars(i)=dir_line;                                                                       
+            i+1;                                                                                                            
+      end;                                                                                                                  
+                                                                                                                            
+      if not find(dir_line,"/") and words>5 then                                                                            
+            do;                                                                                                             
+                  file_mode=new_var1;                                                                                       
+                  number_of_links=new_var2;                                                                                 
+                  owner_name=new_var3;                                                                                      
+                  group_name=new_var4;                                                                                      
+                  bytes=input(new_var5,comma12.);                                                                           
+                  date_last_modified=new_var6;                                                                              
+                  time_modified=new_var7;                                                                                   
+                                                                                                                            
+                  if length(scan(dir_line, 8, " "))>0                                                                       
+                        and substr(dir_line,1,1)='-'                                                                        
+                              then file_name=substr(dir_line,                                                               
+                              find(dir_line,scan(dir_line, 8, " "))                                                         
+                              +length(scan(dir_line, 8, " "))+1,                                                            
+                              length(dir_line)-find(dir_line,scan(dir_line, 8, " ")));                                      
+            end;                                                                                                            
+run;                                                                                                                        
+                                                                                                                            
+                                                                                                                            
+                                                                                                                            
