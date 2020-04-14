@@ -1,6 +1,6 @@
 # utl_file_and_directory_utilities_for_all_operating_systems
 Keywords: sas sql join merge big data analytics macros oracle teradata mysql sas communities stackoverflow statistics artificial inteligence AI Python R Java Javascript WPS Matlab SPSS Scala Perl C C# Excel MS Access JSON graphics maps NLP natural language processing machine learning igraph DOSUBL DOW loop stackoverflow SAS community.
-    File and directory utilities for all operating systems
+        file_and_directory_utilities_for_all_operating_systems
 
     see github
     https://goo.gl/gChmFX
@@ -18,7 +18,7 @@ Keywords: sas sql join merge big data analytics macros oracle teradata mysql sas
     http://support.sas.com/kb/24/820.html
 
      Directory and File Tools
-
+       0.  Unix/Windows comprehesive file attributes
        1.  Windows: directory tree (windows)
        2.  All Platforms - Number of file, file number and filename
        3.  Windows: Recursively list all directories, sub-directories and files into a SAS datasets (DATA _NULL_ SAS-L)
@@ -34,10 +34,11 @@ Keywords: sas sql join merge big data analytics macros oracle teradata mysql sas
       13.  All Platforms does a file exist
       14.  Given a full path extract the folder and filename with and without extension
       15. Delete empty directory
-      16. Detailed-List-of-Directories-and-Files-in-Linux    
-          https://tinyurl.com/y59u45t7                       
-      17. Detailed-List-of-Directories-and-Files-in-Linux   
-          https://tinyurl.com/y59u45t7                    
+      16. Detailed-List-of-Directories-and-Files-in-Linux
+          https://tinyurl.com/y59u45t7
+      17. Detailed-List-of-Directories-and-Files-in-Linux
+          https://tinyurl.com/y59u45t7
+
 
     *                _          _                   _
      _ __ ___   __ _| | _____  (_)_ __  _ __  _   _| |_
@@ -90,7 +91,7 @@ Keywords: sas sql join merge big data analytics macros oracle teradata mysql sas
 
     PROCESS and OUTPUT
     ==================
-   
+
     0.  Unix/Windows comprehesive file attributes
     ==============================================
 
@@ -352,7 +353,7 @@ Keywords: sas sql join merge big data analytics macros oracle teradata mysql sas
 
        4.  Window directory -  creation, size, owner, filename
        =======================================================
-      
+
        * ypu need to use backslash with folder name;
        filename pipes pipe 'DIR /TC /Q /S c:\parent\';
        data Dir(drop=command);
@@ -1353,299 +1354,309 @@ Keywords: sas sql join merge big data analytics macros oracle teradata mysql sas
          end;
        run;quit;
      %mend utl_delmty;
+    %utl_delmty(c:/parent/child_3);
 
-   %utl_delmty(c:/parent/child_3);
-   
-   
-    16. Detailed-List-of-Directories-and-Files-in-Linux                                                                                 
-        https://tinyurl.com/y59u45t7                                                                                                    
-                                                                                                                                        
-    SAS Doc                                                                                                                             
-    https://tinyurl.com/y59u45t7                                                                                                        
-    https://communities.sas.com/t5/SAS-Communities-Library/Detailed-List-of-Directories-and-Files-in-Linux/ta-p/582142                  
-                                                                                                                                        
-    TomRVincent                                                                                                                         
-    https://communities.sas.com/t5/user/viewprofilepage/user-id/144199                                                                  
-                                                                                                                                        
-                                                                                                                                        
-    %let directory=&_r/uml/;                                                                                                            
-                                                                                                                                        
-    filename tmp pipe "ls -mlR --full-time -1 &directory";                                                                              
-                                                                                                                                        
-    data want12;                                                                                                                        
-          infile tmp dlm="¬";                                                                                                           
-          length dir_line $2000;                                                                                                        
-          input dir_line;                                                                                                               
-    run;                                                                                                                                
-                                                                                                                                        
-    proc sql noprint;                                                                                                                   
-          select max(countw(dir_line, ' ')) into :maxwords trimmed from want12;                                                         
-    quit;                                                                                                                               
-                                                                                                                                        
-    data want;                                                                                                                          
-          set want12;                                                                                                                   
-          format dir $200.;                                                                                                             
-          retain dir;                                                                                                                   
-          words = countw(dir_line, ' ');                                                                                                
-                                                                                                                                        
-          if find(dir_line,"/") then                                                                                                    
-                dir=dir_line;                                                                                                           
-          array parsed_vars(*) $200 new_var1-new_var&maxwords;                                                                          
-          i=1;                                                                                                                          
-                                                                                                                                        
-          do while(i<words or scan(dir_line, i, " ") ne "" or i=1);                                                                     
-                if find(dir_line,"/")=0 and scan(dir_line, i, " ") ne ""  and i<>1 then                                                 
-                      parsed_vars(i) =scan(dir_line, i, " ");                                                                           
-                else if i=1 then parsed_vars(i)=dir_line;                                                                               
-                i+1;                                                                                                                    
-          end;                                                                                                                          
-                                                                                                                                        
-          if not find(dir_line,"/") and words>5 then                                                                                    
-                do;                                                                                                                     
-                      file_mode=new_var1;                                                                                               
-                      number_of_links=new_var2;                                                                                         
-                      owner_name=new_var3;                                                                                              
-                      group_name=new_var4;                                                                                              
-                      bytes=input(new_var5,comma12.);                                                                                   
-                      date_last_modified=new_var6;                                                                                      
-                      time_modified=new_var7;                                                                                           
-                                                                                                                                        
-                      if length(scan(dir_line, 8, " "))>0                                                                               
-                            and substr(dir_line,1,1)='-'                                                                                
-                                  then file_name=substr(dir_line,                                                                       
-                                  find(dir_line,scan(dir_line, 8, " "))                                                                 
-                                  +length(scan(dir_line, 8, " "))+1,                                                                    
-                                  length(dir_line)-find(dir_line,scan(dir_line, 8, " ")));                                              
-                end;                                                                                                                    
-    run;                                                                                                                                
-                                                                                                                                        
-     17. Detailed-List-of-Directories-and-Files-in-Linux                                                                                 
-    ====================================================                                                                                
-                                                                                                                                        
-                                                                                                                                        
-    Detailed List of unix file properties                                                                                               
-                                                                                                                                        
-     Related to                                                                                                                         
-        https://tinyurl.com/y59u45t7                                                                                                    
-                                                                                                                                        
-    SAS Doc                                                                                                                             
-    https://tinyurl.com/y59u45t7                                                                                                        
-    https://communities.sas.com/t5/SAS-Communities-Library/Detailed-List-of-Directories-and-Files-in-Linux/ta-p/582142                  
-                                                                                                                                        
-    TomRVincent                                                                                                                         
-    https://communities.sas.com/t5/user/viewprofilepage/user-id/144199                                                                  
-    %let directory=&_r/parent/child_1;                                                                                                  
-                                                                                                                                        
-    *_                   _                                                                                                              
-    (_)_ __  _ __  _   _| |_                                                                                                            
-    | | '_ \| '_ \| | | | __|                                                                                                           
-    | | | | | |_) | |_| | |_                                                                                                            
-    |_|_| |_| .__/ \__,_|\__|                                                                                                           
-            |_|                                                                                                                         
-    ;                                                                                                                                   
-                                                                                                                                        
-    %let _r=** put your base directory in here **;                                                                                      
-                                                                                                                                        
-    * make directories and files;                                                                                                       
-                                                                                                                                        
-    data _null_;                                                                                                                        
-                                                                                                                                        
-      * create directory;                                                                                                               
-      if _n_=0 then do;                                                                                                                 
-          %let rc=%sysfunc(dosubl('                                                                                                     
-             data _null_;                                                                                                               
-                 rc=dcreate("parent","&_r/");                                                                                           
-                 rc=dcreate("child_1","&_r/parent");                                                                                    
-                 rc=dcreate("child_2","&_r/parent");                                                                                    
-             run;quit;                                                                                                                  
-         '));                                                                                                                           
-      end;                                                                                                                              
-                                                                                                                                        
-      file "&_r/parent/child_1/file1.csv"; put "file1";                                                                                 
-      file "&_r/parent/child_1/file2.csv"; put "file2";                                                                                 
-      file "&_r/parent/child_1/file3.csv"; put "file3";                                                                                 
-                                                                                                                                        
-      file "&_r/parent/child_2/file1.txt"; put "file1";                                                                                 
-      file "&_r/parent/child_2/file2.txt"; put "file2";                                                                                 
-      file "&_r/parent/child_2/file3.txt"; put "file3";                                                                                 
-                                                                                                                                        
-    run;quit;                                                                                                                           
-                                                                                                                                        
-    data meta;                                                                                                                          
-     length dir $200 file $200;                                                                                                         
-     input dir file;                                                                                                                    
-    cards4;                                                                                                                             
-    &_r/parent/child_1 file1.csv                                                                                                        
-    &_r/parent/child_1 file2.csv                                                                                                        
-    &_r/parent/child_2 file1.txt                                                                                                        
-    &_r/parent/child_2 file2.txt                                                                                                        
-    ;;;;                                                                                                                                
-    run;quit;                                                                                                                           
-                                                                                                                                        
-     WORK.META total obs=4                                                                                                              
-                                                                                                                                        
-             DIR              FILE                                                                                                      
-                                                                                                                                        
-      &_r/parent/child_1    file1.csv                                                                                                   
-      &_r/parent/child_1    file2.csv                                                                                                   
-      &_r/parent/child_2    file1.txt                                                                                                   
-      &_r/parent/child_2    file2.txt                                                                                                   
-                                                                                                                                        
-    *            _               _                                                                                                      
-      ___  _   _| |_ _ __  _   _| |_                                                                                                    
-     / _ \| | | | __| '_ \| | | | __|                                                                                                   
-    | (_) | |_| | |_| |_) | |_| | |_                                                                                                    
-     \___/ \__,_|\__| .__/ \__,_|\__|                                                                                                   
-                    |_|                                                                                                                 
-    ;                                                                                                                                   
-                                                                                                                                        
-     WORK.LOG                                                                                                                           
-                                                                                                                                        
-               DIR              FILE       RC            STATUS                                                                         
-                                                                                                                                        
-      /home/parent/child_1    file1.csv     0    appendend successfully                                                                 
-      /home/parent/child_1    file2.csv     0    appendend successfully                                                                 
-      /home/parent/child_2    file1.txt     0    appendend successfully                                                                 
-      /home/parent/child_2    file2.txt     0    appendend successfully                                                                 
-                                                                                                                                        
-                                                                                                                                        
-                                                                                                                                        
-    WANTALL total obs=4                                                                                                                 
-                                                                                                                                        
-                                                         NUMBER_     OWNER_    GROUP_              DATE_LAST_                           
-               DIRX           FILE_NAME    FILE_MODE     OF_LINKS     NAME      NAME      BYTES     MODIFIED       TIME_MODIFIED        
-                                                                                                                                        
-      /home/parent/child_1    file1.csv    -rw-rw----       1        rogers    sas_abc      6      2019-08-26    20:08:24.957352000     
-      /home/parent/child_1    file2.csv    -rw-rw----       1        rogers    sas_abc      6      2019-08-26    20:08:24.957352000     
-      /home/parent/child_2    file1.txt    -rw-rw----       1        rogers    sas_abc      6      2019-08-26    20:08:24.957352000     
-      /home/parent/child_2    file2.txt    -rw-rw----       1        rogers    sas_abc      6      2019-08-26    20:08:24.957352000     
-                                                                                                                                        
-                                                                                                                                        
-    *                                                                                                                                   
-     _ __  _ __ ___   ___ ___  ___ ___                                                                                                  
-    | '_ \| '__/ _ \ / __/ _ \/ __/ __|                                                                                                 
-    | |_) | | | (_) | (_|  __/\__ \__ \                                                                                                 
-    | .__/|_|  \___/ \___\___||___/___/                                                                                                 
-    |_|                                                                                                                                 
-    ;                                                                                                                                   
-                                                                                                                                        
-                                                                                                                                        
-    %macro unxfyl(dir=&_r/parent/child_1,file=file1.csv);                                                                               
-                                                                                                                                        
-         /* for testing                                                                                                                 
-            %let dir=&_r/parent/child_1;                                                                                                
-            %let file=file1.csv;                                                                                                        
-         */                                                                                                                             
-                                                                                                                                        
-        filename tmp pipe "ls -mlR --full-time -1 &dir";                                                                                
-                                                                                                                                        
-        data want12;                                                                                                                    
-              infile tmp dlm="¬";                                                                                                       
-              length dir_line $2000;                                                                                                    
-              input dir_line;                                                                                                           
-              if index(upcase(dir_line),upcase("&file."));                                                                              
-        run;                                                                                                                            
-                                                                                                                                        
-        proc sql /*noprint*/;                                                                                                           
-              select max(countw(dir_line, " ")) into :maxwords trimmed from want12;                                                     
-        quit;                                                                                                                           
-                                                                                                                                        
-        data want(drop=new_: i dir dir_line words);                                                                                     
-              length dirx file_name $200;                                                                                               
-              set want12;                                                                                                               
-              format dir $200.;                                                                                                         
-              retain dir;                                                                                                               
-              words = countw(dir_line, " ");                                                                                            
-                                                                                                                                        
-              if find(dir_line,"/") then                                                                                                
-                    dir=dir_line;                                                                                                       
-              array parsed_vars(*) $200 new_var1-new_var&maxwords;                                                                      
-              i=1;                                                                                                                      
-                                                                                                                                        
-              do while(i<words or scan(dir_line, i, " ") ne "" or i=1);                                                                 
-                    if find(dir_line,"/")=0 and scan(dir_line, i, " ") ne ""  and i<>1 then                                             
-                          parsed_vars(i) =scan(dir_line, i, " ");                                                                       
-                    else if i=1 then parsed_vars(i)=dir_line;                                                                           
-                    i+1;                                                                                                                
-              end;                                                                                                                      
-                                                                                                                                        
-              if not find(dir_line,"/") and words>5 then                                                                                
-                 do;                                                                                                                    
-                   dirx="&dir";                                                                                                         
-                   file_mode=new_var1;                                                                                                  
-                   number_of_links=new_var2;                                                                                            
-                   owner_name=new_var3;                                                                                                 
-                   group_name=new_var4;                                                                                                 
-                   bytes=input(new_var5,comma12.);                                                                                      
-                   date_last_modified=new_var6;                                                                                         
-                   time_modified=new_var7;                                                                                              
-                                                                                                                                        
-                   if length(scan(dir_line, 8, " "))>0                                                                                  
-                         and substr(dir_line,1,1)="-"                                                                                   
-                           then file_name=substr(dir_line,                                                                              
-                           find(dir_line,scan(dir_line, 8, " "))                                                                        
-                           +length(scan(dir_line, 8, " "))+1,                                                                           
-                           length(dir_line)-find(dir_line,scan(dir_line, 8, " ")));                                                     
-                 end;                                                                                                                   
-        run;quit;                                                                                                                       
-                                                                                                                                        
-    %mend unxfyl;                                                                                                                       
-                                                                                                                                        
-                                                                                                                                        
-                                                                                                                                        
-    data meta;                                                                                                                          
-     length dir $200 file $200;                                                                                                         
-     input dir file;                                                                                                                    
-    cards4;                                                                                                                             
-    &_r/parent/child_1 file1.csv                                                                                                        
-    &_r/parent/child_1 file2.csv                                                                                                        
-    &_r/parent/child_2 file1.txt                                                                                                        
-    &_r/parent/child_2 file2.txt                                                                                                        
-    ;;;;                                                                                                                                
-    run;quit;                                                                                                                           
-                                                                                                                                        
-    data log;                                                                                                                           
-                                                                                                                                        
-      if _n_=0 then do; %let rc=%sysfunc(dosubl('                                                                                       
-         %symdel dir file maxwords/ nowarn;                                                                                             
-         proc datasets lib=work;                                                                                                        
-            delete wantall;                                                                                                             
-         run;quit;                                                                                                                      
-         '));                                                                                                                           
-      end;                                                                                                                              
-                                                                                                                                        
-      set meta;                                                                                                                         
-                                                                                                                                        
-      call symputx("dir",dir);                                                                                                          
-      call symputx("file",file);                                                                                                        
-                                                                                                                                        
-      rc=dosubl('                                                                                                                       
-         proc datasets lib=work;                                                                                                        
-            delete want want12;                                                                                                         
-         run;quit;                                                                                                                      
-                                                                                                                                        
-         %unxfyl(dir=&dir,file=&file);                                                                                                  
-                                                                                                                                        
-         proc append data=want base=wantall;                                                                                            
-         run;quit;                                                                                                                      
-                                                                                                                                        
-         %let cc=&syserr;                                                                                                               
-                                                                                                                                        
-      ');                                                                                                                               
-                                                                                                                                        
-       if symgetn('syserr') = 0 then do;                                                                                                
-           status = "appendend successfully";                                                                                           
-           putlog status;                                                                                                               
-           output log;                                                                                                                  
-       end;                                                                                                                             
-       else do;                                                                                                                         
-           status = "append unsuccessful";                                                                                              
-           putlog status;                                                                                                               
-           output log;                                                                                                                  
-       end;                                                                                                                             
-                                                                                                                                        
-    run;quit;                                                                                                                           
-                                                                                                                                        
+    © 2018 GitHub, Inc.
+    Terms
+    Privacy
+    Security
+    Status
+    Help
+    Contact GitHub
+    API
+    Training
+    Shop
+    Blog
+
+    16. Detailed-List-of-Directories-and-Files-in-Linux
+    ===================================================
+    SAS Doc
+    https://tinyurl.com/y59u45t7
+    https://communities.sas.com/t5/SAS-Communities-Library/Detailed-List-of-Directories-and-Files-in-Linux/ta-p/582142
+
+    TomRVincent
+    https://communities.sas.com/t5/user/viewprofilepage/user-id/144199
+
+
+    %let directory=&_r/uml/;
+
+    filename tmp pipe "ls -mlR --full-time -1 &directory";
+
+    data want12;
+          infile tmp dlm="¬";
+          length dir_line $2000;
+          input dir_line;
+    run;
+
+    proc sql noprint;
+          select max(countw(dir_line, ' ')) into :maxwords trimmed from want12;
+    quit;
+
+    data want;
+          set want12;
+          format dir $200.;
+          retain dir;
+          words = countw(dir_line, ' ');
+
+          if find(dir_line,"/") then
+                dir=dir_line;
+          array parsed_vars(*) $200 new_var1-new_var&maxwords;
+          i=1;
+
+          do while(i<words or scan(dir_line, i, " ") ne "" or i=1);
+                if find(dir_line,"/")=0 and scan(dir_line, i, " ") ne ""  and i<>1 then
+                      parsed_vars(i) =scan(dir_line, i, " ");
+                else if i=1 then parsed_vars(i)=dir_line;
+                i+1;
+          end;
+
+          if not find(dir_line,"/") and words>5 then
+                do;
+                      file_mode=new_var1;
+                      number_of_links=new_var2;
+                      owner_name=new_var3;
+                      group_name=new_var4;
+                      bytes=input(new_var5,comma12.);
+                      date_last_modified=new_var6;
+                      time_modified=new_var7;
+
+                      if length(scan(dir_line, 8, " "))>0
+                            and substr(dir_line,1,1)='-'
+                                  then file_name=substr(dir_line,
+                                  find(dir_line,scan(dir_line, 8, " "))
+                                  +length(scan(dir_line, 8, " "))+1,
+                                  length(dir_line)-find(dir_line,scan(dir_line, 8, " ")));
+                end;
+    run;
+
+
+
+    17. Detailed-List-of-Directories-and-Files-in-Linux
+        ================================================
+
+     Detailed List of unix file properties
+
+     Related to
+        https://tinyurl.com/y59u45t7
+
+    SAS Doc
+    https://tinyurl.com/y59u45t7
+    https://communities.sas.com/t5/SAS-Communities-Library/Detailed-List-of-Directories-and-Files-in-Linux/ta-p/582142
+
+    TomRVincent
+    https://communities.sas.com/t5/user/viewprofilepage/user-id/144199
+    %let directory=&_r/parent/child_1;
+
+    *_                   _
+    (_)_ __  _ __  _   _| |_
+    | | '_ \| '_ \| | | | __|
+    | | | | | |_) | |_| | |_
+    |_|_| |_| .__/ \__,_|\__|
+            |_|
+    ;
+
+    %let _r=** put your base directory in here **;
+
+    * make directories and files;
+
+    data _null_;
+
+      * create directory;
+      if _n_=0 then do;
+          %let rc=%sysfunc(dosubl('
+             data _null_;
+                 rc=dcreate("parent","&_r/");
+                 rc=dcreate("child_1","&_r/parent");
+                 rc=dcreate("child_2","&_r/parent");
+             run;quit;
+         '));
+      end;
+
+      file "&_r/parent/child_1/file1.csv"; put "file1";
+      file "&_r/parent/child_1/file2.csv"; put "file2";
+      file "&_r/parent/child_1/file3.csv"; put "file3";
+
+      file "&_r/parent/child_2/file1.txt"; put "file1";
+      file "&_r/parent/child_2/file2.txt"; put "file2";
+      file "&_r/parent/child_2/file3.txt"; put "file3";
+
+    run;quit;
+
+    data meta;
+     length dir $200 file $200;
+     input dir file;
+    cards4;
+    &_r/parent/child_1 file1.csv
+    &_r/parent/child_1 file2.csv
+    &_r/parent/child_2 file1.txt
+    &_r/parent/child_2 file2.txt
+    ;;;;
+    run;quit;
+
+     WORK.META total obs=4
+
+             DIR              FILE
+
+      &_r/parent/child_1    file1.csv
+      &_r/parent/child_1    file2.csv
+      &_r/parent/child_2    file1.txt
+      &_r/parent/child_2    file2.txt
+
+    *            _               _
+      ___  _   _| |_ _ __  _   _| |_
+     / _ \| | | | __| '_ \| | | | __|
+    | (_) | |_| | |_| |_) | |_| | |_
+     \___/ \__,_|\__| .__/ \__,_|\__|
+                    |_|
+    ;
+
+     WORK.LOG
+
+               DIR              FILE       RC            STATUS
+
+      /home/parent/child_1    file1.csv     0    appendend successfully
+      /home/parent/child_1    file2.csv     0    appendend successfully
+      /home/parent/child_2    file1.txt     0    appendend successfully
+      /home/parent/child_2    file2.txt     0    appendend successfully
+
+
+
+    WANTALL total obs=4
+
+                                                         NUMBER_     OWNER_    GROUP_              DATE_LAST_
+               DIRX           FILE_NAME    FILE_MODE     OF_LINKS     NAME      NAME      BYTES     MODIFIED       TIME_MODIFIED
+
+      /home/parent/child_1    file1.csv    -rw-rw----       1        rogers    sas_abc      6      2019-08-26    20:08:24.957352000
+      /home/parent/child_1    file2.csv    -rw-rw----       1        rogers    sas_abc      6      2019-08-26    20:08:24.957352000
+      /home/parent/child_2    file1.txt    -rw-rw----       1        rogers    sas_abc      6      2019-08-26    20:08:24.957352000
+      /home/parent/child_2    file2.txt    -rw-rw----       1        rogers    sas_abc      6      2019-08-26    20:08:24.957352000
+
+
+    *
+     _ __  _ __ ___   ___ ___  ___ ___
+    | '_ \| '__/ _ \ / __/ _ \/ __/ __|
+    | |_) | | | (_) | (_|  __/\__ \__ \
+    | .__/|_|  \___/ \___\___||___/___/
+    |_|
+    ;
+
+
+    %macro unxfyl(dir=&_r/parent/child_1,file=file1.csv);
+
+         /* for testing
+            %let dir=&_r/parent/child_1;
+            %let file=file1.csv;
+         */
+
+        filename tmp pipe "ls -mlR --full-time -1 &dir";
+
+        data want12;
+              infile tmp dlm="¬";
+              length dir_line $2000;
+              input dir_line;
+              if index(upcase(dir_line),upcase("&file."));
+        run;
+
+        proc sql /*noprint*/;
+              select max(countw(dir_line, " ")) into :maxwords trimmed from want12;
+        quit;
+
+        data want(drop=new_: i dir dir_line words);
+              length dirx file_name $200;
+              set want12;
+              format dir $200.;
+              retain dir;
+              words = countw(dir_line, " ");
+
+              if find(dir_line,"/") then
+                    dir=dir_line;
+              array parsed_vars(*) $200 new_var1-new_var&maxwords;
+              i=1;
+
+              do while(i<words or scan(dir_line, i, " ") ne "" or i=1);
+                    if find(dir_line,"/")=0 and scan(dir_line, i, " ") ne ""  and i<>1 then
+                          parsed_vars(i) =scan(dir_line, i, " ");
+                    else if i=1 then parsed_vars(i)=dir_line;
+                    i+1;
+              end;
+
+              if not find(dir_line,"/") and words>5 then
+                 do;
+                   dirx="&dir";
+                   file_mode=new_var1;
+                   number_of_links=new_var2;
+                   owner_name=new_var3;
+                   group_name=new_var4;
+                   bytes=input(new_var5,comma12.);
+                   date_last_modified=new_var6;
+                   time_modified=new_var7;
+
+                   if length(scan(dir_line, 8, " "))>0
+                         and substr(dir_line,1,1)="-"
+                           then file_name=substr(dir_line,
+                           find(dir_line,scan(dir_line, 8, " "))
+                           +length(scan(dir_line, 8, " "))+1,
+                           length(dir_line)-find(dir_line,scan(dir_line, 8, " ")));
+                 end;
+        run;quit;
+
+    %mend unxfyl;
+
+
+
+    data meta;
+     length dir $200 file $200;
+     input dir file;
+    cards4;
+    &_r/parent/child_1 file1.csv
+    &_r/parent/child_1 file2.csv
+    &_r/parent/child_2 file1.txt
+    &_r/parent/child_2 file2.txt
+    ;;;;
+    run;quit;
+
+    data log;
+
+      if _n_=0 then do; %let rc=%sysfunc(dosubl('
+         %symdel dir file maxwords/ nowarn;
+         proc datasets lib=work;
+            delete wantall;
+         run;quit;
+         '));
+      end;
+
+      set meta;
+
+      call symputx("dir",dir);
+      call symputx("file",file);
+
+      rc=dosubl('
+         proc datasets lib=work;
+            delete want want12;
+         run;quit;
+
+         %unxfyl(dir=&dir,file=&file);
+
+         proc append data=want base=wantall;
+         run;quit;
+
+         %let cc=&syserr;
+
+      ');
+
+       if symgetn('syserr') = 0 then do;
+           status = "appendend successfully";
+           putlog status;
+           output log;
+       end;
+       else do;
+           status = "append unsuccessful";
+           putlog status;
+           output log;
+       end;
+
+    run;quit;
+
                                                                                                                                         
                                                                                                                                        
                                                 
