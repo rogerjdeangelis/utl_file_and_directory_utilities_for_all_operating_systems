@@ -199,7 +199,8 @@ Keywords: sas sql join merge big data analytics macros oracle teradata mysql sas
 
        4.  Window directory -  creation, size, owner, filename
        =======================================================
-
+      
+       * ypu need to use backslash with folder name;
        filename pipes pipe 'DIR /TC /Q /S c:\parent\';
        data Dir(drop=command);
           length dir command $128;
