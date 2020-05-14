@@ -39,7 +39,16 @@ Keywords: sas sql join merge big data analytics macros oracle teradata mysql sas
       17. Detailed-List-of-Directories-and-Files-in-Linux
           https://tinyurl.com/y59u45t7
 
-
+     * if you want a ascii graphic of the directory structure WITH FILES. issue this command.  
+     x 'tree "c:\parent" /F /A | clip';                                                        
+     Then paste the result 'cntl v'                                                            
+                                                                                                                                                                                   
+     C:\PARENT                                                                                 
+        +---child_1                                                                            
+       |       file1.txt                                                                      
+       |                                                                                      
+       +---child_2                                                                  
+       \---child_3       
     *                _          _                   _
      _ __ ___   __ _| | _____  (_)_ __  _ __  _   _| |_
     | '_ ` _ \ / _` | |/ / _ \ | | '_ \| '_ \| | | | __|
